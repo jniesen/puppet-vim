@@ -16,18 +16,21 @@ class vim {
   $vimdir = "${home}/.vim"
 
   package { 'vim':
-    require => Package['mercurial']
+    require => Python::Pip['mercurial']
   }
 
   # Install mercurial since the vim brew package don't satisfy the requirement (vim is fetched using $ hg)
   python::pip { 'mercurial':
     virtualenv => '/opt/boxen/homebrew',
+    ensure     => present,
+    require    => Python::Pip['docutils'],
   }
 
   # docutils is required by mercurial.
   # https://github.com/boxen/puppet-vim/issues/12
   python::pip { 'docutils':
     virtualenv => '/opt/boxen/homebrew',
+    ensure     => present,
   }
 
   file { [$vimdir,
