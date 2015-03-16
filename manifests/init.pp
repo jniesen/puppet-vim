@@ -9,6 +9,8 @@
 #   }
 #
 class vim {
+  require python
+
   $home = "/Users/${::boxen_user}"
   $vimrc = "${home}/.vimrc"
   $vimdir = "${home}/.vim"
@@ -18,7 +20,9 @@ class vim {
   }
   # Install mercurial since the vim brew package don't satisfy the requirement (vim is fetched using $ hg)
   package { 'mercurial':
-    require => Package['docutils']
+    ensure   => install,
+    require  => Package['docutils'],
+    provider => pip,
   }
   # docutils is required by mercurial.
   # https://github.com/boxen/puppet-vim/issues/12
